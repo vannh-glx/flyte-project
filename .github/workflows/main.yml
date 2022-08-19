@@ -12,6 +12,8 @@ on:
 env:
   REGISTRY: "ghcr.io/vannh-glx"
   IMAGE_NAME: "flyte-workflow"
+  USERNAME: vannh-glx
+  ACCESS_TOKEN: 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
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -22,11 +24,7 @@ jobs:
       - name: Build container image
         run: docker build -t $(echo $REGISTRY)/$(echo $IMAGE_NAME):$(echo $GITHUB_SHA | head -c7) .
       - name: login
-        uses: docker/login-action@v1
-        with:
-          registry: ghcr.io 
-          username: vannh
-          password: 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
+        run: docker login -u $(echo $USERNAME) -p $(echo $ACCESS_TOKEN) ghcr.io
 
       - name: Push image to Container Registry
         run: docker push $(echo $REGISTRY)/$(echo $IMAGE_NAME):$(echo $GITHUB_SHA | head -c7)
